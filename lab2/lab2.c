@@ -1,24 +1,38 @@
 #define _POSIX_C_SOURCE 200809L
-#include <unistd.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 int main() {
-    while(true) { 
-	printf("Enter programs to run.");
-        char *line = NULL;
-        size_t size = 0;
-        if(getline(&line, &size, stdin) != -1) {
-            char *input = line;
-	    char *elim = " / ";
-	    char *token = NULL;
-	    char *saveptr = NULL;
-	    while ((token = strtok_r(input, elim, &saveptr))) {
-	        printf("Token: '%s'\n", token);
- 		input = NULL; }
-	    }
-	   else {
-           printf("Exec failed");
-	   }
-     }
+  while (true) {
+    printf("Enter programs to run.\n");
+    char *line = NULL;
+    size_t size = 0;
+    ssize_t len = getline(&line, &size, stdin);
+    if (len != -1) {
+      if (len > 0 && line[len - 1] == '\n') {
+        line[len - 1] = '\0';
+      }
+    } else {
+      printf("getline failed!");
+      break;
+    }
+    pid_t pid = fork();
+    if (pid == 0) {
+      execlp(line, line, (char *)NULL);
+
+      perror("execlp");
+      exit(EXIT_FAILURE);
+    } else if (pid > 0) {
+      waitpid(pid, NULL, 0);
+    } else {
+      printf("fork failed!");
+      free(line);
+      break;
+    }
+    free(line);
+  }
 }
