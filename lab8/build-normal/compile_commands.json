@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/cmpt201/CMPT-201-Lab/lab8/build-normal",
+  "command": "/usr/bin/clang  -I/home/cmpt201/CMPT-201-Lab/lab8/include -g -pthread -o CMakeFiles/main.dir/src/lab8.c.o -c /home/cmpt201/CMPT-201-Lab/lab8/src/lab8.c",
+  "file": "/home/cmpt201/CMPT-201-Lab/lab8/src/lab8.c",
+  "output": "CMakeFiles/main.dir/src/lab8.c.o"
+}
+]
